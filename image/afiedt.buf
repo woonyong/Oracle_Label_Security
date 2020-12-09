@@ -1,0 +1,2 @@
+delete docadmin.doc_t where doc_no = '20-0005'
+/
