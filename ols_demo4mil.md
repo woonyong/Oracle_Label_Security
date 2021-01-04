@@ -7,7 +7,7 @@ Oracle label Security(OLS) 데모 예제는 군사비밀관리 규정을 기반�
 * 오라클 DB 버전 : Oracle Enterprise Edition 19.3.0.0.0
 * GUI tool : Enterprise Manager Cloud control 13c
 - 이 데모 환경에서는 오라클 DBMS 19c, EMCC Install 과정은 생략합니다.
-* 작성자 : 고운용
+* 작성자 : 고운용(kairkowy@gmail.com)
 * 작성일 : 2020. 3월
 
 # 환경 준비
@@ -23,7 +23,7 @@ alter user lbacsys identified by "password" account unlock;
 
 ### Oracle Label Security 활성화
 ```SQL
-connect / as sa_sysdba
+connect / as sysdba
 
 /* OLS가 활성화 되어 있는지 여부를 확인 합니다 */
 
@@ -92,7 +92,7 @@ Grant EXECUTE on label_to_char to docadmin, docuser;
 * 기타 proxy user를 포함한 어플리케이션 친화적이면서 효율적인 통제 방법은 오라클 security에서 많은 방법을 제공합니다. 직접 Administrator 가이드를 참고하거나 오라클 Tech sales consuntant와 상의하십시오.
 * Assumed user(비밀관리계정) 기본 정보
 
- |부대  | 부서  | 소속코드 |  업무권한  | 비밀취급인가수준| 비밀관리계정|
+|부대  | 부서  | 소속코드 |  업무권한  | 비밀취급인가수준| 비밀관리계정|
 |------|----|----|----|----|-----|
 |AFHQ|HQ |4000 | Manager |2급 |U4000_00|
 |AFOC|HQ|4200|Manager|2급|U4200_00|
@@ -199,9 +199,9 @@ DOC_NO	   DOC_CREATOR		DOC_TYPE   DOC_STATE  SIGN_ORG		   DIST_TARGET		CONTENT
 ### Label Security Policy 생성
 * "doc_t_pol"이름의 OLS Policy를 사용하며 Data Label 값이 저장되는 컬럼명은 'doc_t_label'입니다. 이 Label 컬럼은 OLS administrator에 의해서 관리되는 컬럼이며 사용자에게 보여질수 있고 감출 수도 있습니다(Enable 또는 Disable). 여기서는 Enabled 모드로 실행합니다.
 * 이 테이블에 적용할 Default Ploicy Enforcement option는 'all_control'입니다. 이는 Enforce option에서 제공되는 모든 컨트롤(Read Control, Insert Control, Update Control, Delete Control, Label Default, Label Update, Check Control)을 적용한다는 의미입니다.   
- * Policy Enforcement Options
+  * Policy Enforcement Options
   * Apply No Policy Enforcement (NO_CONTROL) : Use Default Policy Enforcement
-  * Apply Specified Policy Enforcement On Table
+  * Apply Specified Policy Enforcement on Table
 			For all queries (READ_CONTROL)
 			For Insert operations (INSERT_CONTROL)
 			For Update Operations (UPDATE_CONTROL)
@@ -230,13 +230,14 @@ DOC_T_POL	     DOC_T_LABEL	  ENABLED  READ_CONTROL, INSERT_CONTROL, UPDATE_CONTR
 						   TROL
 ```
 ### 생성된 Policy에 대한 admin 권한 부여
-* 만들어진 "ols_t_pol"에 대한 admin 권한을 "docadmin" user에게 부여합니다. _"policyname"\_dba_ 와 같이 사용됩니다.
+* 만들어진 "ols_t_pol"에 대한 admin 권한을 "docadmin" user에게 부여합니다. _"policyname"_dba_ 와 같이 사용됩니다.
 
 ```SQL
 GRANT doc_t_pol_dba TO docadmin;
 ```
 ### OLS Policy에서 사용될 컴포넌트들 생성
-이 데모 환경을 이해하기 위하여 Multi Level Security 개념을 이해할 필요가 있습니다. 정부 기관 또는 군대에서는 자료의 중요도에 따라 2급, 3급, 대외비, 평문으로 구분하여 자료를 관리합니다. 특히 2급, 3급, 대외비를 다루기 위해서는 해당 데이터를 취급할 수 있는 비밀취급 인가를 받아야 합니다. 즉, 2급비밀취급 인가를 받은 사람은 2급, 3급, 대외비, 평문 자료 모두를 다룰 수 있습니다. 3급비밀취급 인가를 받은 사람은 3급, 대외비, 평문 자료를 다룰 수 있지만 2급 비밀은 다룰 수 없습니다. 이러한 데이터 관리 특성을 일반적으로 Multi Level Security 라고 부릅니다.  오라클 OLS는 MLS를 구현 할 수 있는 프레임워크를 가지고 있고 이 것을 Oracle Label Security라 부릅니다.
+이 데모 환경을 이해하기 위하여 Multi Level Security 개념을 이해할 필요가 있습니다. 정부 기관 또는 군대에서는 자료의 중요도에 따라 2급, 3급, 대외비, 평문으로 구분하여 자료를 관리합니다. 특히 2급, 3급, 대외비를 다루기 위해서는 해당 데이터를 취급할 수 있는 비밀취급 인가를 받아야 합니다. 즉, 2급비밀취급 인가를 받은 사람은 2급, 3급, 대외비, 평문 자료 모두를 다룰 수 있습니다. 3급비밀취급 인가를 받은 사람은 3급, 대외비, 평문 자료를 다룰 수 있지만 2급 비밀은 다룰 수 없습니다. 이러한 데이터 관리 특성을 일반적으로 Multi Level Security 라고 부릅니다.  오라클 OLS는 MLS를 구현 할 수 있는 프레임워크를 가지고 있습니다.
+
 
  ![ ](file//../image/MLS_concept.png " MLS ")
 
@@ -372,7 +373,7 @@ EXEC sa_policy_admin.remove_table_policy(policy_name => 'doc_t_pol', schema_name
 * docuser에게 "profile_access" privelege를 부여합니다. docuser 계정을 통하여 set_access_profile로 세션정보를 가진 다른 유저에게(여기에서는 Profiled User들임) doc_t_pol 정책이 적용된 doc_t 테이블 데이터에 액세스할 수 있다는 것을 의미합니다.
 
 ```SQL
-connn lbacsys
+conn lbacsys
 EXEC sa_user_admin.set_user_privs('doc_t_pol','docadmin','full');
 EXEC sa_user_admin.set_user_privs('doc_t_pol','docuser','profile_access');
 ```
