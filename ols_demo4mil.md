@@ -198,19 +198,7 @@ DOC_NO	   DOC_CREATOR		DOC_TYPE   DOC_STATE  SIGN_ORG		   DIST_TARGET		CONTENT
 
 ### Label Security Policy 생성
 * "doc_t_pol"이름의 OLS Policy를 사용하며 Data Label 값이 저장되는 컬럼명은 'doc_t_label'입니다. 이 Label 컬럼은 OLS administrator에 의해서 관리되는 컬럼이며 사용자에게 보여질수 있고 감출 수도 있습니다(Enable 또는 Disable). 여기서는 Enabled 모드로 실행합니다.
-* 이 테이블에 적용할 Default Ploicy Enforcement option는 'all_control'입니다. 이는 Enforce option에서 제공되는 모든 컨트롤(Read Control, Insert Control, Update Control, Delete Control, Label Default, Label Update, Check Control)을 적용한다는 의미입니다.   
-  * Policy Enforcement Options
-  * Apply No Policy Enforcement (NO_CONTROL) : Use Default Policy Enforcement
-  * Apply Specified Policy Enforcement on Table
-			For all queries (READ_CONTROL)
-			For Insert operations (INSERT_CONTROL)
-			For Update Operations (UPDATE_CONTROL)
-			For Delete operations (DELETE_CONTROL)
-			Use session's default label for label column update (LABEL_DEFAULT)
-			Operations that update the label column (LABEL_UPDATE)
- 		  If LABEL_UPDATE is selected, then to modify a label, the user must have one or more of these privileges: WRITEUP,WRITEDOWN,WRITEACROSS
-			Update and Insert operations so that they are read accessible (CHECK_CONTROL)
-		  It prevents a labeling function from modifying a row's label to include a level, group, or compartment that the modifying user would be prevented from accessing.
+* 이 테이블에 적용할 Default Ploicy Enforcement option는 'all_control'입니다. 이는 Enforce option에서 제공되는 모든 컨트롤(Read Control, Insert Control, Update Control, Delete Control, Label Default, Label Update, Check Control)을 적용한다는 의미입니다. enforcement option에 대한 세부내용은 OLS administers guide를 참고하십시오.   
 
 ```SQL
 conn lbacsys/Welcome1
