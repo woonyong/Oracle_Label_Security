@@ -131,7 +131,7 @@ create user U1202_01 identified by welcome1;
 create user U1205_00 identified by welcome1;
 create user U1205_01 identified by welcome1;
 
-grant conect to to U4000_00, U4200_00,U4202_00, U4202_01,U4202_02,U4202_03,U4204_00,U4204_01,U1000_00,U1200_00,U1202_00,U1202_01,U1205_00,U1205_01;
+grant conenct to U4000_00, U4200_00,U4202_00, U4202_01,U4202_02,U4202_03,U4204_00,U4204_01,U1000_00,U1200_00,U1202_00,U1202_01,U1205_00,U1205_01;
 ```
 
 ### 테이블 생성 및 권한 주기
